@@ -35,7 +35,7 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 # ── Config ────────────────────────────────────────────────────────────────────
 
 TOKEN = os.environ.get("TELEGRAM_TOKEN", "")
-ALLOWED_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "")  # "" = pas de restriction
+ALLOWED_CHAT_ID = os.environ.get("TELEGRAM_ADMIN_CHAT_ID", os.environ.get("TELEGRAM_CHAT_ID", ""))
 
 STATE_FILE = Path("orchestrator_state.json")
 DATA_DIR = Path("data")
