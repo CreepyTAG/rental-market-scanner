@@ -15,6 +15,10 @@ build/
 raw_cache/
 checkpoints/
 
+# Orchestrateur
+data/
+orchestrator_state.json
+
 # Exports (générés automatiquement)
 exports/
 

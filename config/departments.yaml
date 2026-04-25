@@ -1,0 +1,867 @@
+# Départements métropolitains français — bboxes approx. pour scraping Airbnb
+# Format identique à cities.yaml — compatible avec run_scan.py
+# tile_lat/tile_lng activent le découpage en tuiles pour les grands départements
+
+departments:
+
+  # ── Ain (01) ─────────────────────────────────────────────────────────────────
+  "01":
+    name: "Ain"
+    center: {lat: 46.10, lng: 5.35}
+    bbox: {south: 45.60, west: 4.70, north: 46.55, east: 5.90}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Aisne (02) ────────────────────────────────────────────────────────────────
+  "02":
+    name: "Aisne"
+    center: {lat: 49.50, lng: 3.50}
+    bbox: {south: 49.00, west: 2.90, north: 50.05, east: 4.25}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Allier (03) ───────────────────────────────────────────────────────────────
+  "03":
+    name: "Allier"
+    center: {lat: 46.35, lng: 3.25}
+    bbox: {south: 45.90, west: 2.55, north: 46.80, east: 3.90}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Alpes-de-Haute-Provence (04) ─────────────────────────────────────────────
+  "04":
+    name: "Alpes-de-Haute-Provence"
+    center: {lat: 44.10, lng: 6.20}
+    bbox: {south: 43.65, west: 5.55, north: 44.55, east: 6.95}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Hautes-Alpes (05) ────────────────────────────────────────────────────────
+  "05":
+    name: "Hautes-Alpes"
+    center: {lat: 44.70, lng: 6.45}
+    bbox: {south: 44.25, west: 5.85, north: 45.15, east: 7.05}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Alpes-Maritimes (06) ─────────────────────────────────────────────────────
+  "06":
+    name: "Alpes-Maritimes"
+    center: {lat: 43.93, lng: 7.10}
+    bbox: {south: 43.48, west: 6.60, north: 44.36, east: 7.72}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Ardèche (07) ─────────────────────────────────────────────────────────────
+  "07":
+    name: "Ardèche"
+    center: {lat: 44.75, lng: 4.40}
+    bbox: {south: 44.25, west: 3.85, north: 45.25, east: 4.95}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Ardennes (08) ────────────────────────────────────────────────────────────
+  "08":
+    name: "Ardennes"
+    center: {lat: 49.70, lng: 4.72}
+    bbox: {south: 49.30, west: 4.05, north: 50.10, east: 5.40}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Ariège (09) ──────────────────────────────────────────────────────────────
+  "09":
+    name: "Ariège"
+    center: {lat: 42.90, lng: 1.45}
+    bbox: {south: 42.55, west: 0.85, north: 43.25, east: 2.10}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Aube (10) ────────────────────────────────────────────────────────────────
+  "10":
+    name: "Aube"
+    center: {lat: 48.30, lng: 4.10}
+    bbox: {south: 47.90, west: 3.40, north: 48.70, east: 4.80}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Aude (11) ────────────────────────────────────────────────────────────────
+  "11":
+    name: "Aude"
+    center: {lat: 43.10, lng: 2.35}
+    bbox: {south: 42.65, west: 1.75, north: 43.55, east: 3.25}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Aveyron (12) ─────────────────────────────────────────────────────────────
+  "12":
+    name: "Aveyron"
+    center: {lat: 44.30, lng: 2.60}
+    bbox: {south: 43.75, west: 1.85, north: 44.90, east: 3.40}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Bouches-du-Rhône (13) ────────────────────────────────────────────────────
+  "13":
+    name: "Bouches-du-Rhône"
+    center: {lat: 43.50, lng: 5.40}
+    bbox: {south: 43.15, west: 4.60, north: 43.95, east: 5.95}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Calvados (14) ────────────────────────────────────────────────────────────
+  "14":
+    name: "Calvados"
+    center: {lat: 49.10, lng: -0.35}
+    bbox: {south: 48.75, west: -1.10, north: 49.45, east: 0.40}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Cantal (15) ──────────────────────────────────────────────────────────────
+  "15":
+    name: "Cantal"
+    center: {lat: 45.10, lng: 2.65}
+    bbox: {south: 44.65, west: 2.05, north: 45.55, east: 3.30}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Charente (16) ────────────────────────────────────────────────────────────
+  "16":
+    name: "Charente"
+    center: {lat: 45.70, lng: 0.22}
+    bbox: {south: 45.30, west: -0.35, north: 46.10, east: 0.80}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Charente-Maritime (17) ───────────────────────────────────────────────────
+  "17":
+    name: "Charente-Maritime"
+    center: {lat: 45.70, lng: -0.90}
+    bbox: {south: 45.10, west: -1.55, north: 46.25, east: -0.15}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Cher (18) ────────────────────────────────────────────────────────────────
+  "18":
+    name: "Cher"
+    center: {lat: 47.10, lng: 2.52}
+    bbox: {south: 46.65, west: 1.90, north: 47.60, east: 3.10}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Corrèze (19) ─────────────────────────────────────────────────────────────
+  "19":
+    name: "Corrèze"
+    center: {lat: 45.30, lng: 1.90}
+    bbox: {south: 44.95, west: 1.40, north: 45.70, east: 2.55}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Corse-du-Sud (2A) ────────────────────────────────────────────────────────
+  "2A":
+    name: "Corse-du-Sud"
+    center: {lat: 41.75, lng: 9.00}
+    bbox: {south: 41.30, west: 8.50, north: 42.20, east: 9.55}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Haute-Corse (2B) ─────────────────────────────────────────────────────────
+  "2B":
+    name: "Haute-Corse"
+    center: {lat: 42.45, lng: 9.20}
+    bbox: {south: 41.95, west: 8.65, north: 42.95, east: 9.60}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Côte-d'Or (21) ───────────────────────────────────────────────────────────
+  "21":
+    name: "Côte-d'Or"
+    center: {lat: 47.40, lng: 4.80}
+    bbox: {south: 46.85, west: 4.05, north: 47.95, east: 5.55}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Côtes-d'Armor (22) ───────────────────────────────────────────────────────
+  "22":
+    name: "Côtes-d'Armor"
+    center: {lat: 48.45, lng: -2.80}
+    bbox: {south: 48.00, west: -3.65, north: 48.90, east: -1.85}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Creuse (23) ──────────────────────────────────────────────────────────────
+  "23":
+    name: "Creuse"
+    center: {lat: 45.90, lng: 2.10}
+    bbox: {south: 45.55, west: 1.55, north: 46.30, east: 2.65}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Dordogne (24) ────────────────────────────────────────────────────────────
+  "24":
+    name: "Dordogne"
+    center: {lat: 45.10, lng: 0.75}
+    bbox: {south: 44.55, west: -0.05, north: 45.65, east: 1.55}
+    zoom: 10
+    tile_lat: 0.06
+    tile_lng: 0.08
+
+  # ── Doubs (25) ───────────────────────────────────────────────────────────────
+  "25":
+    name: "Doubs"
+    center: {lat: 47.10, lng: 6.55}
+    bbox: {south: 46.65, west: 5.85, north: 47.55, east: 7.10}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Drôme (26) ───────────────────────────────────────────────────────────────
+  "26":
+    name: "Drôme"
+    center: {lat: 44.75, lng: 5.10}
+    bbox: {south: 44.15, west: 4.50, north: 45.35, east: 5.75}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Eure (27) ────────────────────────────────────────────────────────────────
+  "27":
+    name: "Eure"
+    center: {lat: 49.10, lng: 1.10}
+    bbox: {south: 48.65, west: 0.40, north: 49.55, east: 1.85}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Eure-et-Loir (28) ────────────────────────────────────────────────────────
+  "28":
+    name: "Eure-et-Loir"
+    center: {lat: 48.40, lng: 1.35}
+    bbox: {south: 47.95, west: 0.70, north: 48.90, east: 2.05}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Finistère (29) ───────────────────────────────────────────────────────────
+  "29":
+    name: "Finistère"
+    center: {lat: 48.20, lng: -4.05}
+    bbox: {south: 47.75, west: -4.80, north: 48.65, east: -3.25}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Gard (30) ────────────────────────────────────────────────────────────────
+  "30":
+    name: "Gard"
+    center: {lat: 44.00, lng: 4.15}
+    bbox: {south: 43.50, west: 3.55, north: 44.55, east: 4.85}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Haute-Garonne (31) ───────────────────────────────────────────────────────
+  "31":
+    name: "Haute-Garonne"
+    center: {lat: 43.35, lng: 1.40}
+    bbox: {south: 42.65, west: 0.60, north: 43.90, east: 2.30}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Gers (32) ────────────────────────────────────────────────────────────────
+  "32":
+    name: "Gers"
+    center: {lat: 43.70, lng: 0.60}
+    bbox: {south: 43.25, west: -0.05, north: 44.15, east: 1.30}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Gironde (33) ─────────────────────────────────────────────────────────────
+  "33":
+    name: "Gironde"
+    center: {lat: 44.85, lng: -0.55}
+    bbox: {south: 44.20, west: -1.25, north: 45.55, east: 0.30}
+    zoom: 10
+    tile_lat: 0.06
+    tile_lng: 0.08
+
+  # ── Hérault (34) ─────────────────────────────────────────────────────────────
+  "34":
+    name: "Hérault"
+    center: {lat: 43.60, lng: 3.35}
+    bbox: {south: 43.25, west: 2.75, north: 44.00, east: 4.05}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Ille-et-Vilaine (35) ─────────────────────────────────────────────────────
+  "35":
+    name: "Ille-et-Vilaine"
+    center: {lat: 48.15, lng: -1.65}
+    bbox: {south: 47.65, west: -2.40, north: 48.65, east: -0.95}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Indre (36) ───────────────────────────────────────────────────────────────
+  "36":
+    name: "Indre"
+    center: {lat: 46.80, lng: 1.60}
+    bbox: {south: 46.35, west: 0.95, north: 47.25, east: 2.25}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Indre-et-Loire (37) ──────────────────────────────────────────────────────
+  "37":
+    name: "Indre-et-Loire"
+    center: {lat: 47.25, lng: 0.70}
+    bbox: {south: 46.90, west: 0.05, north: 47.65, east: 1.45}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Isère (38) ───────────────────────────────────────────────────────────────
+  "38":
+    name: "Isère"
+    center: {lat: 45.30, lng: 5.70}
+    bbox: {south: 44.80, west: 5.00, north: 45.80, east: 6.40}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Jura (39) ────────────────────────────────────────────────────────────────
+  "39":
+    name: "Jura"
+    center: {lat: 46.70, lng: 5.70}
+    bbox: {south: 46.25, west: 5.15, north: 47.20, east: 6.25}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Landes (40) ──────────────────────────────────────────────────────────────
+  "40":
+    name: "Landes"
+    center: {lat: 44.00, lng: -0.80}
+    bbox: {south: 43.35, west: -1.55, north: 44.55, east: 0.10}
+    zoom: 10
+    tile_lat: 0.06
+    tile_lng: 0.08
+
+  # ── Loir-et-Cher (41) ────────────────────────────────────────────────────────
+  "41":
+    name: "Loir-et-Cher"
+    center: {lat: 47.60, lng: 1.45}
+    bbox: {south: 47.20, west: 0.70, north: 48.05, east: 2.25}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Loire (42) ───────────────────────────────────────────────────────────────
+  "42":
+    name: "Loire"
+    center: {lat: 45.70, lng: 4.20}
+    bbox: {south: 45.30, west: 3.70, north: 46.15, east: 4.75}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Haute-Loire (43) ─────────────────────────────────────────────────────────
+  "43":
+    name: "Haute-Loire"
+    center: {lat: 45.10, lng: 3.90}
+    bbox: {south: 44.70, west: 3.35, north: 45.55, east: 4.55}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Loire-Atlantique (44) ────────────────────────────────────────────────────
+  "44":
+    name: "Loire-Atlantique"
+    center: {lat: 47.40, lng: -1.70}
+    bbox: {south: 46.85, west: -2.55, north: 47.90, east: -0.90}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Loiret (45) ──────────────────────────────────────────────────────────────
+  "45":
+    name: "Loiret"
+    center: {lat: 47.90, lng: 2.30}
+    bbox: {south: 47.50, west: 1.55, north: 48.35, east: 3.10}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Lot (46) ─────────────────────────────────────────────────────────────────
+  "46":
+    name: "Lot"
+    center: {lat: 44.60, lng: 1.70}
+    bbox: {south: 44.15, west: 1.05, north: 45.05, east: 2.40}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Lot-et-Garonne (47) ──────────────────────────────────────────────────────
+  "47":
+    name: "Lot-et-Garonne"
+    center: {lat: 44.40, lng: 0.50}
+    bbox: {south: 43.95, west: -0.15, north: 44.85, east: 1.20}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Lozère (48) ──────────────────────────────────────────────────────────────
+  "48":
+    name: "Lozère"
+    center: {lat: 44.55, lng: 3.55}
+    bbox: {south: 44.10, west: 3.00, north: 45.00, east: 4.15}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Maine-et-Loire (49) ──────────────────────────────────────────────────────
+  "49":
+    name: "Maine-et-Loire"
+    center: {lat: 47.39, lng: -0.55}
+    bbox: {south: 46.92, west: -1.45, north: 47.77, east:  0.15}
+    zoom: 9
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Manche (50) ──────────────────────────────────────────────────────────────
+  "50":
+    name: "Manche"
+    center: {lat: 49.10, lng: -1.55}
+    bbox: {south: 48.45, west: -2.15, north: 49.75, east: -0.90}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Marne (51) ───────────────────────────────────────────────────────────────
+  "51":
+    name: "Marne"
+    center: {lat: 49.00, lng: 4.20}
+    bbox: {south: 48.50, west: 3.40, north: 49.55, east: 4.95}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Haute-Marne (52) ─────────────────────────────────────────────────────────
+  "52":
+    name: "Haute-Marne"
+    center: {lat: 48.10, lng: 5.20}
+    bbox: {south: 47.60, west: 4.55, north: 48.65, east: 5.85}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Mayenne (53) ─────────────────────────────────────────────────────────────
+  "53":
+    name: "Mayenne"
+    center: {lat: 48.15, lng: -0.60}
+    bbox: {south: 47.75, west: -1.30, north: 48.55, east: 0.15}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Meurthe-et-Moselle (54) ──────────────────────────────────────────────────
+  "54":
+    name: "Meurthe-et-Moselle"
+    center: {lat: 48.75, lng: 6.20}
+    bbox: {south: 48.30, west: 5.60, north: 49.25, east: 6.90}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Meuse (55) ───────────────────────────────────────────────────────────────
+  "55":
+    name: "Meuse"
+    center: {lat: 48.80, lng: 5.25}
+    bbox: {south: 48.35, west: 4.60, north: 49.30, east: 5.90}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Morbihan (56) ────────────────────────────────────────────────────────────
+  "56":
+    name: "Morbihan"
+    center: {lat: 47.80, lng: -2.80}
+    bbox: {south: 47.35, west: -3.60, north: 48.25, east: -1.95}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Moselle (57) ─────────────────────────────────────────────────────────────
+  "57":
+    name: "Moselle"
+    center: {lat: 49.10, lng: 6.60}
+    bbox: {south: 48.60, west: 5.95, north: 49.60, east: 7.30}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Nièvre (58) ──────────────────────────────────────────────────────────────
+  "58":
+    name: "Nièvre"
+    center: {lat: 47.10, lng: 3.70}
+    bbox: {south: 46.60, west: 2.95, north: 47.65, east: 4.40}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Nord (59) ────────────────────────────────────────────────────────────────
+  "59":
+    name: "Nord"
+    center: {lat: 50.50, lng: 3.20}
+    bbox: {south: 50.10, west: 2.50, north: 51.10, east: 4.25}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Oise (60) ────────────────────────────────────────────────────────────────
+  "60":
+    name: "Oise"
+    center: {lat: 49.40, lng: 2.45}
+    bbox: {south: 49.00, west: 1.70, north: 49.85, east: 3.20}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Orne (61) ────────────────────────────────────────────────────────────────
+  "61":
+    name: "Orne"
+    center: {lat: 48.50, lng: 0.10}
+    bbox: {south: 48.10, west: -0.65, north: 48.90, east: 0.95}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Pas-de-Calais (62) ───────────────────────────────────────────────────────
+  "62":
+    name: "Pas-de-Calais"
+    center: {lat: 50.50, lng: 2.20}
+    bbox: {south: 50.00, west: 1.60, north: 51.00, east: 3.05}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Puy-de-Dôme (63) ─────────────────────────────────────────────────────────
+  "63":
+    name: "Puy-de-Dôme"
+    center: {lat: 45.75, lng: 3.10}
+    bbox: {south: 45.25, west: 2.45, north: 46.30, east: 3.90}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Pyrénées-Atlantiques (64) ────────────────────────────────────────────────
+  "64":
+    name: "Pyrénées-Atlantiques"
+    center: {lat: 43.35, lng: -0.80}
+    bbox: {south: 42.75, west: -1.65, north: 43.80, east: 0.05}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Hautes-Pyrénées (65) ─────────────────────────────────────────────────────
+  "65":
+    name: "Hautes-Pyrénées"
+    center: {lat: 43.05, lng: 0.20}
+    bbox: {south: 42.65, west: -0.35, north: 43.50, east: 0.80}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Pyrénées-Orientales (66) ─────────────────────────────────────────────────
+  "66":
+    name: "Pyrénées-Orientales"
+    center: {lat: 42.60, lng: 2.70}
+    bbox: {south: 42.30, west: 2.00, north: 42.90, east: 3.40}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Bas-Rhin (67) ────────────────────────────────────────────────────────────
+  "67":
+    name: "Bas-Rhin"
+    center: {lat: 48.55, lng: 7.55}
+    bbox: {south: 48.10, west: 7.05, north: 49.05, east: 8.25}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Haut-Rhin (68) ───────────────────────────────────────────────────────────
+  "68":
+    name: "Haut-Rhin"
+    center: {lat: 47.80, lng: 7.30}
+    bbox: {south: 47.40, west: 6.90, north: 48.20, east: 7.80}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Rhône (69) ───────────────────────────────────────────────────────────────
+  "69":
+    name: "Rhône"
+    center: {lat: 45.80, lng: 4.70}
+    bbox: {south: 45.45, west: 4.20, north: 46.30, east: 5.20}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Haute-Saône (70) ─────────────────────────────────────────────────────────
+  "70":
+    name: "Haute-Saône"
+    center: {lat: 47.60, lng: 6.10}
+    bbox: {south: 47.20, west: 5.50, north: 48.05, east: 6.80}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Saône-et-Loire (71) ──────────────────────────────────────────────────────
+  "71":
+    name: "Saône-et-Loire"
+    center: {lat: 46.60, lng: 4.60}
+    bbox: {south: 46.10, west: 3.95, north: 47.15, east: 5.35}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Sarthe (72) ──────────────────────────────────────────────────────────────
+  "72":
+    name: "Sarthe"
+    center: {lat: 48.00, lng: 0.20}
+    bbox: {south: 47.60, west: -0.55, north: 48.45, east: 1.00}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Savoie (73) ──────────────────────────────────────────────────────────────
+  "73":
+    name: "Savoie"
+    center: {lat: 45.50, lng: 6.45}
+    bbox: {south: 45.05, west: 5.80, north: 45.95, east: 7.15}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Haute-Savoie (74) ────────────────────────────────────────────────────────
+  "74":
+    name: "Haute-Savoie"
+    center: {lat: 46.10, lng: 6.40}
+    bbox: {south: 45.65, west: 5.75, north: 46.55, east: 7.05}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Paris (75) ───────────────────────────────────────────────────────────────
+  "75":
+    name: "Paris"
+    center: {lat: 48.86, lng: 2.35}
+    bbox: {south: 48.81, west: 2.22, north: 48.91, east: 2.47}
+    zoom: 12
+    tile_lat: 0.04
+    tile_lng: 0.05
+
+  # ── Seine-Maritime (76) ──────────────────────────────────────────────────────
+  "76":
+    name: "Seine-Maritime"
+    center: {lat: 49.70, lng: 1.10}
+    bbox: {south: 49.25, west: 0.20, north: 50.10, east: 2.00}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Seine-et-Marne (77) ──────────────────────────────────────────────────────
+  "77":
+    name: "Seine-et-Marne"
+    center: {lat: 48.60, lng: 2.90}
+    bbox: {south: 48.10, west: 2.25, north: 49.10, east: 3.65}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Yvelines (78) ────────────────────────────────────────────────────────────
+  "78":
+    name: "Yvelines"
+    center: {lat: 48.78, lng: 1.85}
+    bbox: {south: 48.50, west: 1.35, north: 49.10, east: 2.35}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Deux-Sèvres (79) ─────────────────────────────────────────────────────────
+  "79":
+    name: "Deux-Sèvres"
+    center: {lat: 46.60, lng: -0.30}
+    bbox: {south: 46.15, west: -0.95, north: 47.05, east: 0.40}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Somme (80) ───────────────────────────────────────────────────────────────
+  "80":
+    name: "Somme"
+    center: {lat: 49.90, lng: 2.30}
+    bbox: {south: 49.50, west: 1.55, north: 50.35, east: 3.15}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Tarn (81) ────────────────────────────────────────────────────────────────
+  "81":
+    name: "Tarn"
+    center: {lat: 43.80, lng: 2.10}
+    bbox: {south: 43.40, west: 1.50, north: 44.25, east: 2.75}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Tarn-et-Garonne (82) ─────────────────────────────────────────────────────
+  "82":
+    name: "Tarn-et-Garonne"
+    center: {lat: 44.10, lng: 1.40}
+    bbox: {south: 43.75, west: 0.75, north: 44.50, east: 2.10}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Var (83) ─────────────────────────────────────────────────────────────────
+  "83":
+    name: "Var"
+    center: {lat: 43.50, lng: 6.20}
+    bbox: {south: 43.05, west: 5.55, north: 43.90, east: 6.95}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Vaucluse (84) ────────────────────────────────────────────────────────────
+  "84":
+    name: "Vaucluse"
+    center: {lat: 44.00, lng: 5.10}
+    bbox: {south: 43.65, west: 4.65, north: 44.40, east: 5.65}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Vendée (85) ──────────────────────────────────────────────────────────────
+  "85":
+    name: "Vendée"
+    center: {lat: 46.70, lng: -1.40}
+    bbox: {south: 46.25, west: -2.25, north: 47.15, east: -0.50}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Vienne (86) ──────────────────────────────────────────────────────────────
+  "86":
+    name: "Vienne"
+    center: {lat: 46.55, lng: 0.45}
+    bbox: {south: 46.10, west: -0.20, north: 47.00, east: 1.15}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Haute-Vienne (87) ────────────────────────────────────────────────────────
+  "87":
+    name: "Haute-Vienne"
+    center: {lat: 45.80, lng: 1.30}
+    bbox: {south: 45.40, west: 0.75, north: 46.25, east: 1.90}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Vosges (88) ──────────────────────────────────────────────────────────────
+  "88":
+    name: "Vosges"
+    center: {lat: 48.10, lng: 6.40}
+    bbox: {south: 47.65, west: 5.75, north: 48.55, east: 7.10}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Yonne (89) ───────────────────────────────────────────────────────────────
+  "89":
+    name: "Yonne"
+    center: {lat: 47.80, lng: 3.55}
+    bbox: {south: 47.35, west: 2.85, north: 48.30, east: 4.30}
+    zoom: 10
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Territoire de Belfort (90) ───────────────────────────────────────────────
+  "90":
+    name: "Territoire de Belfort"
+    center: {lat: 47.62, lng: 6.90}
+    bbox: {south: 47.45, west: 6.70, north: 47.80, east: 7.10}
+    zoom: 12
+
+  # ── Essonne (91) ─────────────────────────────────────────────────────────────
+  "91":
+    name: "Essonne"
+    center: {lat: 48.50, lng: 2.30}
+    bbox: {south: 48.25, west: 1.90, north: 48.80, east: 2.65}
+    zoom: 11
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Hauts-de-Seine (92) ──────────────────────────────────────────────────────
+  "92":
+    name: "Hauts-de-Seine"
+    center: {lat: 48.85, lng: 2.23}
+    bbox: {south: 48.77, west: 2.14, north: 48.93, east: 2.34}
+    zoom: 12
+    tile_lat: 0.04
+    tile_lng: 0.05
+
+  # ── Seine-Saint-Denis (93) ───────────────────────────────────────────────────
+  "93":
+    name: "Seine-Saint-Denis"
+    center: {lat: 48.92, lng: 2.48}
+    bbox: {south: 48.84, west: 2.33, north: 49.00, east: 2.63}
+    zoom: 12
+    tile_lat: 0.04
+    tile_lng: 0.05
+
+  # ── Val-de-Marne (94) ────────────────────────────────────────────────────────
+  "94":
+    name: "Val-de-Marne"
+    center: {lat: 48.78, lng: 2.47}
+    bbox: {south: 48.70, west: 2.32, north: 48.86, east: 2.62}
+    zoom: 12
+    tile_lat: 0.04
+    tile_lng: 0.05
+
+  # ── Val-d'Oise (95) ──────────────────────────────────────────────────────────
+  "95":
+    name: "Val-d'Oise"
+    center: {lat: 49.10, lng: 2.15}
+    bbox: {south: 48.90, west: 1.65, north: 49.40, east: 2.65}
+    zoom: 11
+    tile_lat: 0.07
+    tile_lng: 0.09

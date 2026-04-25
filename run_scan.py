@@ -159,6 +159,13 @@ async def scan_city(
 
 
 async def main(args: argparse.Namespace) -> None:
+    # Configure DB path before any storage import resolves DB_PATH
+    if args.db_path:
+        import os
+        os.environ["RENTAL_DB_PATH"] = args.db_path
+        import db.storage as _st
+        _st.DB_PATH = __import__("pathlib").Path(args.db_path)
+
     cities = load_cities()
 
     if args.dry_run:
@@ -260,6 +267,12 @@ Exemples :
         type=int,
         default=15,
         help="Nombre max de pages de résultats à scraper par ville (défaut: 15)",
+    )
+    parser.add_argument(
+        "--db-path",
+        metavar="PATH",
+        default=None,
+        help="Chemin vers la base DuckDB (défaut: rental_market.db ou $RENTAL_DB_PATH)",
     )
     return parser.parse_args()
 

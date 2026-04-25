@@ -12,7 +12,9 @@ import pandas as pd
 from rich.console import Console
 
 console = Console()
-DB_PATH = Path("rental_market.db")
+
+import os as _os
+DB_PATH = Path(_os.environ.get("RENTAL_DB_PATH", "rental_market.db"))
 
 
 # ── Schema ────────────────────────────────────────────────────────────────────
