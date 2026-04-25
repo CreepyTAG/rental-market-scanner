@@ -1,0 +1,33 @@
+# Browser automation
+playwright>=1.44.0
+
+# Database
+duckdb>=0.10.3
+
+# Data processing
+pandas>=2.2.2
+numpy>=1.26.4
+
+# Dashboard
+streamlit>=1.35.0
+plotly>=5.22.0
+folium>=0.17.0
+streamlit-folium>=0.20.0
+
+# Geocoding
+geopy>=2.4.1
+
+# HTTP client
+httpx>=0.27.0
+
+# Scheduling
+apscheduler>=3.10.4
+
+# Config
+pyyaml>=6.0.1
+
+# CLI logging
+rich>=13.7.1
+
+# Excel export
+openpyxl>=3.1.2

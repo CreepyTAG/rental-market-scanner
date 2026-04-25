@@ -1,0 +1,39 @@
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Base de données (données personnelles)
+*.db
+*.db-wal
+*.db-shm
+
+# Cache et données scrapées
+raw_cache/
+checkpoints/
+
+# Exports (générés automatiquement)
+exports/
+
+# Logs
+logs/
+*.log
+nohup.out
+
+# Env & secrets
+.env
+*.env
+config/secrets.yaml
+
+# macOS
+.DS_Store
+.AppleDouble
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.claude/

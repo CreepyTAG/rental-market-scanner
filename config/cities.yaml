@@ -1,0 +1,289 @@
+cities:
+  # ── Angers Agglomération — vue globale ─────────────────────────────────────
+  angers_agglo:
+    name: "Angers Agglomération"
+    center:
+      lat: 47.4784
+      lng: -0.5632
+    bbox:
+      south: 47.3800
+      west: -0.7200
+      north: 47.5700
+      east: -0.4100
+    zoom: 11
+    tile_lat: 0.06   # ~6.7 km par tuile → meilleure couverture Airbnb
+    tile_lng: 0.08   # ~5.8 km par tuile
+
+  # ── Communes individuelles (Angers Loire Métropole) ────────────────────────
+  angers_centre:
+    name: "Angers Centre"
+    center:
+      lat: 47.4784
+      lng: -0.5632
+    bbox:
+      south: 47.4500
+      west: -0.6100
+      north: 47.5100
+      east: -0.5100
+    zoom: 13
+
+  avrille:
+    name: "Avrillé"
+    center:
+      lat: 47.5050
+      lng: -0.6030
+    bbox:
+      south: 47.4830
+      west: -0.6420
+      north: 47.5270
+      east: -0.5640
+    zoom: 13
+
+  beaucouze:
+    name: "Beaucouzé"
+    center:
+      lat: 47.4730
+      lng: -0.6410
+    bbox:
+      south: 47.4500
+      west: -0.6800
+      north: 47.4970
+      east: -0.6030
+    zoom: 13
+
+  bouchemaine:
+    name: "Bouchemaine"
+    center:
+      lat: 47.4250
+      lng: -0.6310
+    bbox:
+      south: 47.3980
+      west: -0.6720
+      north: 47.4530
+      east: -0.5900
+    zoom: 13
+
+  cantenay_epinard:
+    name: "Cantenay-Épinard"
+    center:
+      lat: 47.5340
+      lng: -0.5760
+    bbox:
+      south: 47.5080
+      west: -0.6180
+      north: 47.5600
+      east: -0.5340
+    zoom: 13
+
+  ecouflant:
+    name: "Écouflant"
+    center:
+      lat: 47.5210
+      lng: -0.5340
+    bbox:
+      south: 47.4980
+      west: -0.5680
+      north: 47.5440
+      east: -0.5000
+    zoom: 13
+
+  les_ponts_de_ce:
+    name: "Les Ponts-de-Cé"
+    center:
+      lat: 47.4280
+      lng: -0.5340
+    bbox:
+      south: 47.4030
+      west: -0.5720
+      north: 47.4530
+      east: -0.4960
+    zoom: 13
+
+  murs_erisne:
+    name: "Mûrs-Erigné"
+    center:
+      lat: 47.4030
+      lng: -0.5530
+    bbox:
+      south: 47.3750
+      west: -0.5970
+      north: 47.4300
+      east: -0.5090
+    zoom: 13
+
+  saint_barthelemy_anjou:
+    name: "Saint-Barthélemy-d'Anjou"
+    center:
+      lat: 47.4667
+      lng: -0.5000
+    bbox:
+      south: 47.4400
+      west: -0.5400
+      north: 47.4950
+      east: -0.4600
+    zoom: 13
+
+  sainte_gemmes_loire:
+    name: "Sainte-Gemmes-sur-Loire"
+    center:
+      lat: 47.4410
+      lng: -0.5790
+    bbox:
+      south: 47.4150
+      west: -0.6220
+      north: 47.4670
+      east: -0.5360
+    zoom: 13
+
+  trelaze:
+    name: "Trélazé"
+    center:
+      lat: 47.4630
+      lng: -0.5150
+    bbox:
+      south: 47.4430
+      west: -0.5430
+      north: 47.4830
+      east: -0.4870
+    zoom: 13
+
+  verrieres_en_anjou:
+    name: "Verrières-en-Anjou"
+    center:
+      lat: 47.5050
+      lng: -0.4780
+    bbox:
+      south: 47.4780
+      west: -0.5270
+      north: 47.5350
+      east: -0.4290
+    zoom: 13
+
+  # ── Maine-et-Loire (49) — hors agglo Angers ──────────────────────────────
+
+  # Vue globale du 49 (scan après les zones individuelles)
+  maine_et_loire:
+    name: "Maine-et-Loire"
+    center:
+      lat: 47.3900
+      lng: -0.5500
+    bbox:
+      south: 46.9200
+      west: -1.4500
+      north: 47.7700
+      east:  0.1500
+    zoom: 9
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # Saumur et vallée de la Loire (tourisme, vin)
+  saumur:
+    name: "Saumur"
+    center:
+      lat: 47.2601
+      lng: -0.0769
+    bbox:
+      south: 47.2200
+      west: -0.1500
+      north: 47.3100
+      east:  0.0000
+    zoom: 13
+
+  saumur_agglo:
+    name: "Saumur Agglo"
+    center:
+      lat: 47.2601
+      lng: -0.0769
+    bbox:
+      south: 47.1200
+      west: -0.3000
+      north: 47.4000
+      east:  0.1800
+    zoom: 11
+    tile_lat: 0.06
+    tile_lng: 0.08
+
+  # Cholet (2e ville du 49)
+  cholet:
+    name: "Cholet"
+    center:
+      lat: 47.0598
+      lng: -0.8788
+    bbox:
+      south: 47.0200
+      west: -0.9400
+      north: 47.1000
+      east: -0.8100
+    zoom: 13
+
+  cholet_agglo:
+    name: "Cholet Agglo"
+    center:
+      lat: 47.0598
+      lng: -0.8788
+    bbox:
+      south: 46.9200
+      west: -1.1500
+      north: 47.2000
+      east: -0.6000
+    zoom: 11
+    tile_lat: 0.06
+    tile_lng: 0.08
+
+  # Loire-Layon (entre Angers et Saumur — vignobles)
+  loire_layon:
+    name: "Loire-Layon"
+    center:
+      lat: 47.1900
+      lng: -0.4200
+    bbox:
+      south: 47.0800
+      west: -0.6000
+      north: 47.3200
+      east: -0.2000
+    zoom: 11
+    tile_lat: 0.06
+    tile_lng: 0.08
+
+  # Nord Anjou (Segré, Le Lion-d'Angers)
+  nord_anjou:
+    name: "Nord Anjou"
+    center:
+      lat: 47.6500
+      lng: -0.8700
+    bbox:
+      south: 47.5000
+      west: -1.1500
+      north: 47.8000
+      east: -0.5500
+    zoom: 11
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # Baugeois (Baugé-en-Anjou, forêts)
+  baugeois:
+    name: "Baugeois"
+    center:
+      lat: 47.5400
+      lng: -0.1050
+    bbox:
+      south: 47.3800
+      west: -0.3500
+      north: 47.7000
+      east:  0.1500
+    zoom: 11
+    tile_lat: 0.07
+    tile_lng: 0.09
+
+  # ── Autres ────────────────────────────────────────────────────────────────
+  puerto_iguazu:
+    name: "Puerto Iguazú"
+    center:
+      lat: -25.60
+      lng: -54.57
+    bbox:
+      south: -25.65
+      west: -54.62
+      north: -25.55
+      east: -54.52
+    zoom: 13
