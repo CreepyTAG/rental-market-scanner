@@ -1,244 +1,223 @@
 # Rental Market Scanner
 
-Analyse du marché locatif court terme (Airbnb) — extensible à toute la France.
-
-Scraping en deux phases via Playwright + Brave/Chromium, stockage DuckDB, dashboard Streamlit, export Excel automatique.
-
----
-
-## Données collectées par annonce
-
-### Table `listings` — fiche complète
-
-| Champ | Type | Description | Source |
-|---|---|---|---|
-| `id` | string | Identifiant interne (`airbnb_XXXXX`) | — |
-| `source` | string | Plateforme (`airbnb`, `booking`, `vrbo`) | — |
-| `ville` | string | Ville / zone configurée | config |
-| **Identité** ||||
-| `titre` | string | Titre de l'annonce | DOM `<h1>` |
-| `type_bien` | string | Appartement, maison, studio… | body text |
-| `superhost` | bool | Hôte certifié Superhôte | body text |
-| `instant_book` | bool | Réservation instantanée | body text |
-| `url` | string | URL de l'annonce | — |
-| `photos_count` | int | Nombre de photos | DOM |
-| **Capacité** ||||
-| `nb_voyageurs` | int | Capacité max en voyageurs | body text |
-| `nb_chambres` | int | Nombre de chambres | body text |
-| `nb_lits` | int | Nombre de lits | body text |
-| `nb_sdb` | int | Nombre de salles de bain | body text |
-| `minimum_nights` | int | Durée de séjour minimum | body text |
-| **Localisation** ||||
-| `lat` / `lng` | float | Coordonnées GPS | JSON-LD `geo` / `__NEXT_DATA__` / géocodage commune |
-| `neighbourhood` | string | Commune / quartier | JSON-LD `addressLocality` |
-| `code_postal` | string | Code postal | JSON-LD / `__NEXT_DATA__` |
-| `zone_geo` | string | Zone calculée (Nord, Sud-Est…) | calcul bbox |
-| **Tarifs** ||||
-| `prix_nuit` | float | Prix par nuit (€) | API `StaysPdpSections` / body text / DOM |
-| `prix_semaine` | float | Prix moyen lun–jeu (€) | calendrier API (jours avec prix) |
-| `prix_weekend` | float | Prix moyen ven–dim (€) | calendrier API (jours avec prix) |
-| `cleaning_fee` | float | Frais de ménage (€) | API `StaysPdpSections` |
-| **Qualité** ||||
-| `note` | float | Note globale (ex : 4.87) | JSON-LD `aggregateRating` |
-| `nb_avis` | int | Nombre d'avis | JSON-LD `reviewCount` |
-| **Équipements** ||||
-| `amenities` | string | Liste des équipements (CSV) | DOM `[data-section-id="AMENITIES"]` + scan keywords |
-| **Timestamps** ||||
-| `created_at` | timestamp | Premier scan | — |
-| `updated_at` | timestamp | Dernière modification | — |
-| `last_scanned_at` | timestamp | Dernier passage phase 2 | — |
-
-**Équipements détectés** : Cuisine, Four, Micro-ondes, Réfrigérateur, Lave-vaisselle, Cafetière, Grille-pain, Lave-linge, Sèche-linge, Climatisation, Chauffage, Wifi, TV, Parking, Piscine, Jacuzzi, Terrasse, Jardin, Balcon, Barbecue, Cheminée, Sauna, Animaux acceptés, Bureau, Lit bébé, Alarme incendie…
-
-### Table `availability` — calendrier jour par jour
-
-| Champ | Type | Description |
-|---|---|---|
-| `listing_id` | string | Référence vers `listings.id` |
-| `date` | date | Date (365 jours depuis aujourd'hui) |
-| `is_available` | bool | Disponible (`true`) ou réservé/bloqué (`false`) |
-| `scraped_at` | timestamp | Date du scraping |
-
-### Table `price_snapshots` — historique des prix
-
-| Champ | Type | Description |
-|---|---|---|
-| `listing_id` | string | Référence vers `listings.id` |
-| `prix_nuit` | float | Prix constaté lors du scan |
-| `scraped_at` | timestamp | Date du scan |
-
-### Table `scan_log` — journal des scans
-
-| Champ | Type | Description |
-|---|---|---|
-| `ville` | string | Zone scannée |
-| `source` | string | Plateforme |
-| `started_at` / `ended_at` | timestamp | Durée du scan |
-| `status` | string | `success` / `error` |
-| `nb_listings` | int | Listings trouvés |
-| `nb_inserted` / `nb_updated` / `nb_errors` | int | Détail des opérations DB |
-
-### Métriques calculées (à la lecture)
-
-| Métrique | Formule |
-|---|---|
-| `taux_remplissage_90` | `jours_réservés_90j / 90 × 100` |
-| `taux_remplissage_365` | `jours_réservés_365j / 365 × 100` |
-| `revpar` | `prix_nuit × taux_remplissage_90 / 100` |
-| `revenu_mensuel_estime` | `prix_nuit × jours_réservés_365j / 12` |
-
-> Le taux de remplissage est estimé depuis le calendrier public Airbnb : les jours indisponibles sont présumés réservés.
+Analyse du marché locatif court terme (Airbnb, Booking.com, VRBO) à l'échelle nationale.
+Scraping via Playwright + Brave, stockage DuckDB, dashboard Streamlit.
 
 ---
 
-## Architecture — deux phases
+## Prérequis
 
-```
-Phase 1 — Collecte des IDs (rapide, DOM uniquement)
-  bbox → tuiles (si tile_lat/tile_lng configurés)
-    └── chaque tuile → N pages de résultats → extraction des IDs
-  → déduplication globale → liste unique d'IDs à scraper
-
-Phase 2 — Scraping des annonces (détaillé)
-  pour chaque ID :
-    ├── DOM : titre, capacité, équipements, superhost, instant_book
-    ├── JSON-LD : coords, adresse, note, nb_avis
-    ├── __NEXT_DATA__ : coords (fallback si JSON-LD vide)
-    ├── API PdpAvailabilityCalendar : disponibilité 365j + prix journaliers
-    └── API StaysPdpSections : prix/nuit, frais ménage, coords
-```
+- Python 3.11+
+- [Brave Browser](https://brave.com/) installé
+- Être déjà connecté à Airbnb et Booking.com dans Brave
 
 ---
 
 ## Installation
 
-### macOS / Linux local
-
 ```bash
+cd rental-market-scanner
+
 python -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate          # macOS / Linux
+# .venv\Scripts\activate           # Windows
+
 pip install -r requirements.txt
 playwright install chromium
 ```
 
-Brave Browser est utilisé en priorité s'il est installé. Sinon Chromium est utilisé automatiquement.
-
-### VPS Ubuntu/Debian
-
-```bash
-# Dépendances système pour Playwright headless
-apt-get update && apt-get install -y \
-    libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 \
-    libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 \
-    libxfixes3 libxrandr2 libgbm1 libasound2
-
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-playwright install chromium
-playwright install-deps chromium   # installe les libs manquantes auto
-
-# Lancement headless (par défaut)
-python run_scan.py --all --source airbnb
-```
-
-Brave n'est pas nécessaire sur VPS — Playwright utilise son Chromium bundled.
-
-### Automatisation sur VPS (cron)
-
-```bash
-# Scan quotidien à 2h du matin
-0 2 * * * cd /opt/rental-market-scanner && .venv/bin/python run_scan.py --all --source airbnb >> logs/scan.log 2>&1
-
-# Ou via le scheduler intégré
-python scheduler.py
-```
-
 ---
 
-## Lancement
+## Lancement rapide
+
+### 1. Scan manuel d'un département
 
 ```bash
-# Une ville
-python run_scan.py --city "Angers Agglomération" --source airbnb
+# Scanner la Vendée (Airbnb uniquement)
+python run_scan.py --city "Vendée" --db-path vendee.db --source airbnb
 
-# Toutes les villes configurées
-python run_scan.py --all --source airbnb
+# Reprendre un scan interrompu
+python run_scan.py --city "Vendée" --db-path vendee.db --source airbnb --resume
 
-# Options
---max-pages 15       # pages de résultats par tuile (défaut: 15)
---skip-days 7        # re-scanner après N jours (défaut: 7, 0 = toujours)
---dry-run            # simule sans sauvegarder
---resume             # reprend un scan interrompu (checkpoint)
---no-headless        # affiche le navigateur (debug)
+# Mode dry-run : voir ce qui serait scrapé sans sauvegarder
+python run_scan.py --city "Vendée" --dry-run
 ```
 
----
+> Les données sont sauvegardées **toutes les 20 annonces** pendant le scan.
+> Si le process est tué, les données déjà récupérées sont conservées.
 
-## Dashboard
+### 2. Scan parallèle de plusieurs départements (orchestrateur)
+
+```bash
+# Tous les départements, 3 workers parallèles
+python orchestrator.py
+
+# Départements spécifiques
+python orchestrator.py --depts 85 44 22 29 35 56
+
+# Reprendre après une interruption
+python orchestrator.py --resume
+
+# 5 workers, Airbnb uniquement
+python orchestrator.py --workers 5 --source airbnb
+```
+
+Chaque département génère :
+- une DB : `data/dept_{code}.db`
+- un export Excel : `exports/scan_{departement}.xlsx`
+
+### 3. Fusionner les exports départementaux en un fichier France
+
+```bash
+python merge_exports.py
+# → exports/france_complet_YYYYMMDD.xlsx
+```
+
+Le fichier contient 3 onglets :
+- **Tous les listings** — toutes les annonces fusionnées et dédupliquées
+- **Résumé par dépt** — stats par département
+- **Résumé France** — vue globale par source
+
+### 4. Dashboard Streamlit
 
 ```bash
 streamlit run dashboard/app.py
-# → http://localhost:8501
 ```
 
-Carte interactive, heatmaps prix/occupation, scatter prix vs taux, top listings RevPAR.
+Ouvre `http://localhost:8501`.
 
 ---
 
-## Villes configurées — `config/cities.yaml`
-
-22 zones préconfigurées :
-
-| Zone | Type | Tuiles |
-|---|---|---|
-| **Angers Agglomération** | Vue globale ALM | 16 tuiles |
-| Angers Centre, Avrillé, Beaucouzé, Bouchemaine | Communes ALM | — |
-| Cantenay-Épinard, Écouflant, Les Ponts-de-Cé | Communes ALM | — |
-| Mûrs-Erigné, Saint-Barthélemy-d'Anjou | Communes ALM | — |
-| Sainte-Gemmes-sur-Loire, Trélazé, Verrières-en-Anjou | Communes ALM | — |
-| **Maine-et-Loire** | Département entier | ~90 tuiles |
-| Saumur, Saumur Agglo | Saumur + agglo | — / 12 tuiles |
-| Cholet, Cholet Agglo | Cholet + agglo | — / 12 tuiles |
-| Loire-Layon, Nord Anjou, Baugeois | Zones rurales | 8 tuiles chacune |
-| Puerto Iguazú | Test international | — |
-
----
-
-## Ajouter une ville
-
-```yaml
-# config/cities.yaml
-ma_ville:
-  name: "Ma Ville"
-  center:
-    lat: 47.xxxx
-    lng: -0.xxxx
-  bbox:
-    south: 47.xx
-    west: -0.xx
-    north: 47.xx
-    east: -0.xx
-  zoom: 13
-  tile_lat: 0.06   # optionnel : tiling pour grandes zones (~6.7 km/tuile)
-  tile_lng: 0.08   # optionnel : (~5.8 km/tuile)
-```
-
----
-
-## Anti-ban
-
-- Délais adaptatifs aléatoires : 2–4s (<10 req), 3–6s (<30), 5–9s (<60), 8–14s (60+)
-- Rotation de User-Agent (pool de 6 UA : Chrome, Firefox, Safari, Linux/Mac/Windows)
-- Détection captcha/blocage avec log automatique
-- `--no-sandbox` + `--disable-dev-shm-usage` pour stabilité VPS
-
----
-
-## Checkpoint / Resume
+## Workflow VPS recommandé
 
 ```bash
-python run_scan.py --city "Angers Agglomération" --resume
+# Connexion
+ssh user@ton-vps
+
+# Lancer dans tmux pour survivre à la déconnexion
+tmux new -s scan
+cd ~/rental-market-scanner && git pull
+
+# Scan d'un département
+.venv/bin/python run_scan.py --city "Vendée" --db-path vendee.db --source airbnb
+
+# Détacher tmux : Ctrl+B puis D
+# Revenir plus tard : tmux attach -t scan
 ```
 
-Sauvegarde les IDs collectés (phase 1) et traités (phase 2) dans `checkpoints/<city_key>.json`. Reprend exactement là où le scan s'est arrêté.
+Récupérer les exports sur ton Mac :
+```bash
+scp user@ton-vps:~/rental-market-scanner/exports/scan_vendee.xlsx exports/
+python merge_exports.py
+```
+
+---
+
+## Structure des données
+
+### Base DuckDB
+
+| Table             | Description                                       |
+|-------------------|---------------------------------------------------|
+| `listings`        | Fiche de chaque logement (prix, note, coords…)   |
+| `availability`    | Disponibilité jour par jour sur 365 jours         |
+| `price_snapshots` | Historique des prix (une entrée par scan)         |
+| `scan_log`        | Journal de chaque scan (statut, durée, nb annonces) |
+
+### Export Excel (par département)
+
+| Onglet          | Contenu                                     |
+|-----------------|---------------------------------------------|
+| Listings        | Toutes les annonces avec métriques calculées |
+| Saisonnalité    | Taux d'occupation mensuel par listing        |
+| Résumé          | Stats agrégées par source                    |
+
+---
+
+## Métriques calculées
+
+| Métrique              | Formule                                              |
+|-----------------------|------------------------------------------------------|
+| Taux de remplissage   | `jours_indisponibles / 90 × 100`                    |
+| RevPAR estimé         | `prix_moyen × taux_remplissage / 100`               |
+| Revenu mensuel estimé | `prix_nuit × jours_indispo_365 / 12`                |
+| Prix semaine          | Moyenne lundi–jeudi depuis le calendrier            |
+| Prix week-end         | Moyenne vendredi–dimanche depuis le calendrier       |
+
+> Le taux de remplissage est estimé à partir des jours bloqués dans le calendrier
+> public Airbnb (jours non disponibles = présumés réservés).
+
+---
+
+## Départements configurés (96)
+
+| Code | Département | Code | Département | Code | Département |
+|------|-------------|------|-------------|------|-------------|
+| 01 | Ain | 34 | Hérault | 67 | Bas-Rhin |
+| 02 | Aisne | 35 | Ille-et-Vilaine | 68 | Haut-Rhin |
+| 03 | Allier | 36 | Indre | 69 | Rhône |
+| 04 | Alpes-de-Haute-Provence | 37 | Indre-et-Loire | 70 | Haute-Saône |
+| 05 | Hautes-Alpes | 38 | Isère | 71 | Saône-et-Loire |
+| 06 | Alpes-Maritimes | 39 | Jura | 72 | Sarthe |
+| 07 | Ardèche | 40 | Landes | 73 | Savoie |
+| 08 | Ardennes | 41 | Loir-et-Cher | 74 | Haute-Savoie |
+| 09 | Ariège | 42 | Loire | 75 | Paris |
+| 10 | Aube | 43 | Haute-Loire | 76 | Seine-Maritime |
+| 11 | Aude | 44 | Loire-Atlantique | 77 | Seine-et-Marne |
+| 12 | Aveyron | 45 | Loiret | 78 | Yvelines |
+| 13 | Bouches-du-Rhône | 46 | Lot | 79 | Deux-Sèvres |
+| 14 | Calvados | 47 | Lot-et-Garonne | 80 | Somme |
+| 15 | Cantal | 48 | Lozère | 81 | Tarn |
+| 16 | Charente | 49 | Maine-et-Loire | 82 | Tarn-et-Garonne |
+| 17 | Charente-Maritime | 50 | Manche | 83 | Var |
+| 18 | Cher | 51 | Marne | 84 | Vaucluse |
+| 19 | Corrèze | 52 | Haute-Marne | 85 | Vendée |
+| 2A | Corse-du-Sud | 53 | Mayenne | 86 | Vienne |
+| 2B | Haute-Corse | 54 | Meurthe-et-Moselle | 87 | Haute-Vienne |
+| 21 | Côte-d'Or | 55 | Meuse | 88 | Vosges |
+| 22 | Côtes-d'Armor | 56 | Morbihan | 89 | Yonne |
+| 23 | Creuse | 57 | Moselle | 90 | Territoire de Belfort |
+| 24 | Dordogne | 58 | Nièvre | 91 | Essonne |
+| 25 | Doubs | 59 | Nord | 92 | Hauts-de-Seine |
+| 26 | Drôme | 60 | Oise | 93 | Seine-Saint-Denis |
+| 27 | Eure | 61 | Orne | 94 | Val-de-Marne |
+| 28 | Eure-et-Loir | 62 | Pas-de-Calais | 95 | Val-d'Oise |
+| 29 | Finistère | 63 | Puy-de-Dôme | | |
+| 30 | Gard | 64 | Pyrénées-Atlantiques | | |
+| 31 | Haute-Garonne | 65 | Hautes-Pyrénées | | |
+| 32 | Gers | 66 | Pyrénées-Orientales | | |
+| 33 | Gironde | | | | |
+
+---
+
+## Ajouter une ville personnalisée
+
+Editer `config/cities.yaml` :
+
+```yaml
+cities:
+  ma_ville:
+    name: "Ma Ville"
+    center:
+      lat: 47.xxxx
+      lng: -0.xxxx
+    bbox:
+      south: 47.xx
+      west:  -0.xx
+      north: 47.xx
+      east:  -0.xx
+    zoom: 13
+    tile_lat: 0.06  # optionnel — découpe en tuiles pour les grandes zones
+    tile_lng: 0.08
+```
+
+---
+
+## Notes techniques
+
+- Scrapers 100% async (`asyncio` + Playwright)
+- Sauvegarde progressive toutes les 20 annonces (résistant aux crashes)
+- Checkpoint par ville : reprise possible avec `--resume`
+- Délais aléatoires 2–5 s entre requêtes pour éviter le rate-limiting
+- Cache JSON brut dans `raw_cache/` (airbnb / booking / vrbo)
+- Mode `--dry-run` sans aucune écriture en base ni cache
