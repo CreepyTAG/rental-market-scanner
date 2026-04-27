@@ -649,6 +649,8 @@ async def scrape_airbnb(
     resume: bool = False,
     tile_lat: float = 0.0,
     tile_lng: float = 0.0,
+    save_batch_fn=None,
+    batch_size: int = 20,
 ) -> list[dict]:
     """
     Two-phase Airbnb scraper.
@@ -723,6 +725,7 @@ async def scrape_airbnb(
     # ──────────────────────────────────────────────────────────────────────────
     console.rule("[bold]Phase 2 — Scraping des annonces[/bold]", style="green")
     all_listings: list[dict] = []
+    save_buffer: list[dict] = []
     request_count = 0
 
     with Progress(
@@ -821,10 +824,19 @@ async def scrape_airbnb(
             )
 
             all_listings.append(listing)
+            save_buffer.append(listing)
             progress.advance(task)
+
+            if save_batch_fn and len(save_buffer) >= batch_size:
+                save_batch_fn(save_buffer.copy())
+                save_buffer.clear()
+                console.log(f"[dim]Sauvegarde intermédiaire : {len(all_listings)} listings enregistrés[/dim]")
 
             if not should_skip:
                 await adaptive_delay(request_count)
+
+    if save_batch_fn and save_buffer:
+        save_batch_fn(save_buffer)
 
     clear_checkpoint(city_key)
     console.log(f"[bold green]Total Airbnb : {len(all_listings)} listings pour {city_name}[/bold green]")

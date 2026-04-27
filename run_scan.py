@@ -111,9 +111,19 @@ async def scan_city(
     all_listings: list = []
 
     if source in (None, "airbnb"):
-        all_listings += await run_source(
-            "airbnb",
-            scrape_airbnb(
+        # Airbnb: progressive saves every 20 listings to avoid losing data on crash
+        airbnb_conn = get_connection() if not dry_run else None
+        airbnb_scan_id = log_scan_start(airbnb_conn, city_name, "airbnb", dry_run) if airbnb_conn else None
+        airbnb_counts = {"inserted": 0, "updated": 0, "errors": 0}
+
+        def _save_airbnb_batch(batch: list) -> None:
+            if airbnb_conn and batch:
+                c = save_listings_batch(airbnb_conn, batch)
+                for k in airbnb_counts:
+                    airbnb_counts[k] += c[k]
+
+        try:
+            airbnb_listings = await scrape_airbnb(
                 browser,
                 city_key=city_key,
                 city_name=city_name,
@@ -125,8 +135,27 @@ async def scan_city(
                 max_pages=max_pages,
                 tile_lat=city_cfg.get("tile_lat", 0.0),
                 tile_lng=city_cfg.get("tile_lng", 0.0),
-            ),
-        )
+                save_batch_fn=_save_airbnb_batch,
+                batch_size=20,
+            )
+            console.log(f"[green]{len(airbnb_listings)} listings Airbnb[/green]")
+            if airbnb_conn:
+                log_scan_end(
+                    airbnb_conn, airbnb_scan_id,
+                    status="success",
+                    nb_listings=len(airbnb_listings),
+                    nb_inserted=airbnb_counts["inserted"],
+                    nb_updated=airbnb_counts["updated"],
+                    nb_errors=airbnb_counts["errors"],
+                )
+            all_listings += airbnb_listings
+        except Exception as e:
+            console.log(f"[red]Airbnb échoué : {e}[/red]")
+            if airbnb_conn:
+                log_scan_end(airbnb_conn, airbnb_scan_id, status="error", message=str(e)[:500])
+        finally:
+            if airbnb_conn:
+                airbnb_conn.close()
 
     if source in (None, "booking"):
         all_listings += await run_source(

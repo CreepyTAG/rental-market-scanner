@@ -275,6 +275,21 @@ cities:
     tile_lat: 0.07
     tile_lng: 0.09
 
+  # Vendée (85)
+  vendee:
+    name: "Vendée"
+    center:
+      lat: 46.67
+      lng: -1.47
+    bbox:
+      south: 46.22
+      west: -2.47
+      north: 47.12
+      east: -0.47
+    zoom: 9
+    tile_lat: 0.07
+    tile_lng: 0.09
+
   # ── Autres ────────────────────────────────────────────────────────────────
   puerto_iguazu:
     name: "Puerto Iguazú"
