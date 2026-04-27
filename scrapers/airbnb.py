@@ -194,9 +194,9 @@ async def _collect_ids_for_bbox(
 
             try:
                 await page.goto(url, wait_until="domcontentloaded", timeout=30_000)
-                await random_delay(1.5, 3)
+                await random_delay(1, 2)
                 await human_scroll(page, steps=4)
-                await asyncio.sleep(1)
+                await asyncio.sleep(0.7)
 
                 ids = await _extract_ids_from_page(page)
                 fresh = [id_ for id_ in ids if id_ not in global_seen]
@@ -220,7 +220,7 @@ async def _collect_ids_for_bbox(
                     console.log("[yellow]Pas de page suivante[/yellow]")
                     break
 
-                await random_delay(2, 4)
+                await random_delay(1.3, 2.7)
 
             except Exception as e:
                 console.log(f"[red]Erreur page {page_idx}: {e}[/red]")
@@ -334,11 +334,11 @@ async def _scrape_listing_page(page: Page, listing_url: str) -> dict:
 
     try:
         await page.goto(listing_url, wait_until="domcontentloaded", timeout=30_000)
-        await asyncio.sleep(4)
+        await asyncio.sleep(2.7)
 
         # Give extra time if API responses haven't arrived yet
         if not api_sections:
-            await asyncio.sleep(3)
+            await asyncio.sleep(2)
 
         if not api_sections and not api_calendar:
             console.log("[yellow]Aucune réponse API interceptée — prix via DOM uniquement[/yellow]")

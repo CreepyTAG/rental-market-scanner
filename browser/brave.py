@@ -161,19 +161,19 @@ async def adaptive_delay(consecutive_requests: int) -> None:
     Stays reasonable even at high volume — Airbnb tolerates steady pacing.
     """
     if consecutive_requests < 10:
-        await random_delay(2, 4)
+        await random_delay(1.3, 2.7)
     elif consecutive_requests < 30:
-        await random_delay(3, 6)
+        await random_delay(2, 4)
     elif consecutive_requests < 60:
         console.log("[yellow]Ralentissement préventif (>30 requêtes)[/yellow]")
-        await random_delay(5, 9)
+        await random_delay(3.3, 6)
     else:
         console.log("[yellow]Pause longue (>60 requêtes)[/yellow]")
-        await random_delay(8, 14)
+        await random_delay(5.3, 9.3)
 
 
 async def human_scroll(page: Page, steps: int = 5) -> None:
     """Scroll the page progressively to trigger lazy loading."""
     for _ in range(steps):
         await page.evaluate("window.scrollBy(0, window.innerHeight * 0.6)")
-        await asyncio.sleep(random.uniform(0.3, 0.8))
+        await asyncio.sleep(random.uniform(0.2, 0.5))
