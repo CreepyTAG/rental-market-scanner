@@ -20,7 +20,7 @@ from playwright.async_api import Page
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, MofNCompleteColumn
 
-from browser.brave import get_new_page, random_delay, adaptive_delay, human_scroll, detect_block
+from browser.brave import get_new_page, random_delay, adaptive_delay, human_scroll, detect_block, block_resources
 
 console = Console()
 RAW_CACHE_DIR = Path("raw_cache/airbnb")
@@ -184,6 +184,7 @@ async def _collect_ids_for_bbox(
     """
     new_ids: list[str] = []
     page = await get_new_page(browser)
+    await block_resources(page)
 
     try:
         for page_idx in range(max_pages if not dry_run else 1):
@@ -883,6 +884,7 @@ async def scrape_airbnb(
                 cal_page = None
                 try:
                     cal_page = await get_new_page(browser)
+                    await block_resources(cal_page)
                     enriched = await _scrape_listing_page(cal_page, listing_url)
 
                     # Merge all enriched fields

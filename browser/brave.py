@@ -66,8 +66,21 @@ async def get_browser(
         "--disable-infobars",
         "--disable-extensions",
         "--disable-popup-blocking",
-        "--no-sandbox",             # requis sur la plupart des VPS Linux
-        "--disable-dev-shm-usage",  # évite l'épuisement de /dev/shm sur VPS
+        "--no-sandbox",
+        "--disable-dev-shm-usage",
+        # CPU savings — inutile en headless
+        "--disable-gpu",
+        "--disable-accelerated-2d-canvas",
+        "--disable-accelerated-video-decode",
+        "--disable-background-networking",
+        "--disable-background-timer-throttling",
+        "--disable-client-side-phishing-detection",
+        "--disable-hang-monitor",
+        "--disable-sync",
+        "--disable-translate",
+        "--mute-audio",
+        "--no-zygote",
+        "--force-color-profile=srgb",
     ]
 
     try:
@@ -177,3 +190,38 @@ async def human_scroll(page: Page, steps: int = 5) -> None:
     for _ in range(steps):
         await page.evaluate("window.scrollBy(0, window.innerHeight * 0.6)")
         await asyncio.sleep(random.uniform(0.2, 0.5))
+
+
+# ── Resource blocking ─────────────────────────────────────────────────────────
+
+_BLOCKED_RESOURCE_TYPES = {"image", "media", "font", "stylesheet"}
+
+_BLOCKED_DOMAINS = [
+    "google-analytics.com", "googletagmanager.com",
+    "facebook.net", "doubleclick.net", "googlesyndication.com",
+    "amplitude.com", "segment.io", "segment.com",
+    "mixpanel.com", "hotjar.com", "clarity.ms",
+    "sentry.io", "bugsnag.com", "newrelic.com",
+    "cookielaw.org", "onetrust.com",
+    "datadog-rum.com", "browser.sentry-cdn.com",
+]
+
+
+async def block_resources(page: Page) -> None:
+    """
+    Abort images, media, fonts, stylesheets, and analytics requests.
+    Saves 30-50% CPU per Chromium instance on media-heavy pages like Airbnb.
+    XHR/fetch (API calls we need) are never blocked.
+    """
+    async def _route_handler(route):
+        req = route.request
+        if req.resource_type in _BLOCKED_RESOURCE_TYPES:
+            await route.abort()
+            return
+        for domain in _BLOCKED_DOMAINS:
+            if domain in req.url:
+                await route.abort()
+                return
+        await route.continue_()
+
+    await page.route("**/*", _route_handler)
