@@ -349,11 +349,27 @@ async def _scrape_listing_page(page: Page, listing_url: str) -> dict:
                 const body = document.body.innerText || '';
                 const bl   = body.toLowerCase();
 
-                // Title
-                const h1 = document.querySelector('h1');
-                const titre = h1 ? h1.innerText.trim() : null;
+                // Title — multiple selectors, fallback to og:title meta
+                let titre = null;
+                const titleSels = [
+                    '[data-section-id="TITLE_DEFAULT"] h1',
+                    '[data-testid="listing-page-title"]',
+                    'h1[elementtiming]',
+                    'h1',
+                ];
+                for (const sel of titleSels) {
+                    const el = document.querySelector(sel);
+                    if (el && el.innerText && el.innerText.trim().length > 2) {
+                        titre = el.innerText.trim();
+                        break;
+                    }
+                }
+                if (!titre) {
+                    const og = document.querySelector('meta[property="og:title"]');
+                    if (og) titre = og.getAttribute('content');
+                }
 
-                // Photos count (various selectors)
+                // Photos count
                 const photoSels = [
                     '[data-testid="photo-viewer-section"] img',
                     '[data-section-id="HERO_DEFAULT"] img',
@@ -379,7 +395,32 @@ async def _scrape_listing_page(page: Page, listing_url: str) -> dict:
                              || body.match(/durée\\s*minimum.*?(\\d+)\\s*nuit/i);
                 if (mnMatch) minimum_nights = parseInt(mnMatch[1]);
 
-                // Amenities: try DOM selectors then fall back to text scan
+                // nb_avis — DOM: rating header "4,95 · 127 avis"
+                let nb_avis_dom = null;
+                const ratingSelectors = [
+                    '[data-section-id="OVERVIEW_DEFAULT"] button[aria-label*="avis"]',
+                    'a[href*="reviews"]',
+                    'button[aria-label*="avis"]',
+                    'span[aria-label*="avis"]',
+                ];
+                for (const sel of ratingSelectors) {
+                    for (const el of document.querySelectorAll(sel)) {
+                        const t = el.innerText || el.getAttribute('aria-label') || '';
+                        const m = t.match(/(\\d[\\d\\s]*?)\\s*avis/i);
+                        if (m) {
+                            const n = parseInt(m[1].replace(/\\s/g, ''));
+                            if (n > 0) { nb_avis_dom = n; break; }
+                        }
+                    }
+                    if (nb_avis_dom) break;
+                }
+                // Fallback: scan body text for "X avis" / "X commentaires"
+                if (!nb_avis_dom) {
+                    const bm = body.match(/(\\d+)\\s*(?:commentaires?|avis)/i);
+                    if (bm) nb_avis_dom = parseInt(bm[1]);
+                }
+
+                // Amenities
                 const amenitySels = [
                     '[data-section-id="AMENITIES"] li',
                     '[data-testid="amenity-row"]',
@@ -397,7 +438,7 @@ async def _scrape_listing_page(page: Page, listing_url: str) -> dict:
                 }
 
                 return { titre, photos_count, superhost, instant_book,
-                         minimum_nights, amenityTexts };
+                         minimum_nights, amenityTexts, nb_avis_dom };
             }
         """)
 
@@ -407,6 +448,7 @@ async def _scrape_listing_page(page: Page, listing_url: str) -> dict:
         result["instant_book"]   = dom.get("instant_book")
         result["minimum_nights"] = dom.get("minimum_nights")
         result["photos_count"]   = dom.get("photos_count") or None
+        result["_nb_avis_dom"]   = dom.get("nb_avis_dom")
 
         # ── Full body text (used for amenities fallback + capacity) ───────────
         body_text: str = await page.evaluate("() => document.body.innerText")
@@ -462,6 +504,10 @@ async def _scrape_listing_page(page: Page, listing_url: str) -> dict:
                     result["nb_avis"] = int(rating.get("reviewCount", 0)) or None
             except Exception:
                 pass
+
+        # Fallback nb_avis: DOM extraction if JSON-LD returned nothing
+        if not result["nb_avis"] and result.get("_nb_avis_dom"):
+            result["nb_avis"] = result["_nb_avis_dom"]
 
         # ── __NEXT_DATA__: coords (Airbnb masque geo dans JSON-LD) ────────────
         if result["lat"] is None:

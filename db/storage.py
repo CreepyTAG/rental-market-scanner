@@ -39,6 +39,7 @@ CREATE TABLE IF NOT EXISTS listings (
     lng             DOUBLE,
     zone_geo        VARCHAR,
     code_postal     VARCHAR,
+    code_dept       VARCHAR,
     neighbourhood   VARCHAR,
     -- Tarifs
     prix_nuit       DOUBLE,
@@ -126,6 +127,7 @@ def _migrate_schema(conn: duckdb.DuckDBPyConnection) -> None:
             "prix_semaine":   "DOUBLE",
             "prix_weekend":   "DOUBLE",
             "code_postal":    "VARCHAR",
+            "code_dept":      "VARCHAR",
             "neighbourhood":  "VARCHAR",
         }
         for col_name, col_type in new_cols.items():
@@ -137,6 +139,18 @@ def _migrate_schema(conn: duckdb.DuckDBPyConnection) -> None:
 
 
 # ── Upsert listing ────────────────────────────────────────────────────────────
+
+def _postal_to_dept(code_postal: Optional[str]) -> Optional[str]:
+    if not code_postal:
+        return None
+    cp = str(code_postal).strip().zfill(5)
+    prefix = cp[:2]
+    if prefix == "20":
+        return "2A" if cp[2] <= "1" else "2B"
+    if prefix in ("97", "98"):
+        return cp[:3]
+    return prefix
+
 
 def _make_listing_id(source: str, id_externe: Optional[str], url: Optional[str]) -> str:
     """Build a stable unique ID for a listing."""
@@ -159,6 +173,7 @@ def upsert_listing(conn: duckdb.DuckDBPyConnection, listing: dict) -> tuple[str,
         listing.get("url"),
     )
     last_scanned_at = listing.get("last_scanned_at")
+    code_dept = listing.get("code_dept") or _postal_to_dept(listing.get("code_postal"))
 
     existing = conn.execute(
         "SELECT id FROM listings WHERE id = ?", [listing_id]
@@ -180,6 +195,7 @@ def upsert_listing(conn: duckdb.DuckDBPyConnection, listing: dict) -> tuple[str,
         ("lat",            listing.get("lat")),
         ("lng",            listing.get("lng")),
         ("code_postal",    listing.get("code_postal")),
+        ("code_dept",      code_dept),
         ("neighbourhood",  listing.get("neighbourhood")),
         ("prix_nuit",      listing.get("prix_nuit")),
         ("prix_semaine",   listing.get("prix_semaine")),
@@ -196,7 +212,7 @@ def upsert_listing(conn: duckdb.DuckDBPyConnection, listing: dict) -> tuple[str,
     coalesce_cols = {
         "zone_geo", "type_bien", "superhost", "instant_book",
         "nb_voyageurs", "nb_chambres", "nb_lits", "nb_sdb",
-        "lat", "lng", "code_postal", "neighbourhood",
+        "lat", "lng", "code_postal", "code_dept", "neighbourhood",
         "prix_nuit", "prix_semaine", "prix_weekend", "cleaning_fee",
         "minimum_nights", "note", "nb_avis", "photos_count",
         "amenities", "last_scanned_at",
@@ -227,7 +243,7 @@ def upsert_listing(conn: duckdb.DuckDBPyConnection, listing: dict) -> tuple[str,
             id, source, ville,
             titre, type_bien, superhost, instant_book,
             nb_voyageurs, nb_chambres, nb_lits, nb_sdb,
-            lat, lng, zone_geo, code_postal, neighbourhood,
+            lat, lng, zone_geo, code_postal, code_dept, neighbourhood,
             prix_nuit, prix_semaine, prix_weekend, cleaning_fee, minimum_nights,
             note, nb_avis, photos_count, amenities,
             url, last_scanned_at
@@ -248,7 +264,7 @@ def upsert_listing(conn: duckdb.DuckDBPyConnection, listing: dict) -> tuple[str,
             listing.get("nb_voyageurs"), listing.get("nb_chambres"),
             listing.get("nb_lits"), listing.get("nb_sdb"),
             listing.get("lat"), listing.get("lng"),
-            listing.get("zone_geo"), listing.get("code_postal"), listing.get("neighbourhood"),
+            listing.get("zone_geo"), listing.get("code_postal"), code_dept, listing.get("neighbourhood"),
             listing.get("prix_nuit"), listing.get("prix_semaine"), listing.get("prix_weekend"),
             listing.get("cleaning_fee"), listing.get("minimum_nights"),
             listing.get("note"), listing.get("nb_avis"), listing.get("photos_count"),
