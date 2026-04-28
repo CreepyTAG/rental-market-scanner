@@ -420,25 +420,57 @@ async def _scrape_listing_page(page: Page, listing_url: str) -> dict:
                     if (bm) nb_avis_dom = parseInt(bm[1]);
                 }
 
-                // Amenities
+                // Amenities — full list including unavailable
                 const amenitySels = [
                     '[data-section-id="AMENITIES"] li',
                     '[data-testid="amenity-row"]',
                     'section[aria-label*="équipement"] li',
+                    '[data-section-id="AMENITIES_DEFAULT"] li',
                 ];
                 let amenityTexts = [];
                 for (const sel of amenitySels) {
                     const els = document.querySelectorAll(sel);
                     if (els.length > 2) {
-                        amenityTexts = [...els]
-                            .map(e => e.innerText.trim().split('\\n')[0])
-                            .filter(t => t.length > 1 && t.length < 80);
+                        amenityTexts = [...els].map(e => {
+                            const t = e.innerText.trim().split('\\n')[0];
+                            const unavail = e.querySelector('[aria-label*="Indisponible"]')
+                                         || e.classList.toString().includes('unavailable')
+                                         || e.innerText.includes('Indisponible');
+                            return unavail ? '[-] ' + t : t;
+                        }).filter(t => t.replace('[-] ','').length > 1 && t.length < 100);
+                        if (amenityTexts.length > amenityTexts.filter(t=>t).length) continue;
                         break;
                     }
                 }
 
+                // Sub-ratings from aria-label
+                const subRatings = {};
+                const categories = ['propreté','précision','arrivée','communication','emplacement','qualité-prix'];
+                for (const cat of categories) {
+                    const el = document.querySelector('[aria-label*="' + cat + '"]');
+                    if (el) {
+                        const m = (el.getAttribute('aria-label') || el.innerText || '').match(/([\\d,]+)\\s*sur\\s*5/);
+                        if (m) subRatings[cat] = parseFloat(m[1].replace(',', '.'));
+                    }
+                }
+                // Fallback: body text patterns
+                if (Object.keys(subRatings).length === 0) {
+                    const patterns = [
+                        ['propreté', /Propreté\\s*\\n?\\s*([\\d,]+)/i],
+                        ['précision', /Précision\\s*\\n?\\s*([\\d,]+)/i],
+                        ['arrivée', /Arrivée\\s*\\n?\\s*([\\d,]+)/i],
+                        ['communication', /Communication\\s*\\n?\\s*([\\d,]+)/i],
+                        ['emplacement', /Emplacement\\s*\\n?\\s*([\\d,]+)/i],
+                        ['qualité-prix', /Qualité-prix\\s*\\n?\\s*([\\d,]+)/i],
+                    ];
+                    for (const [cat, re] of patterns) {
+                        const m = body.match(re);
+                        if (m) subRatings[cat] = parseFloat(m[1].replace(',', '.'));
+                    }
+                }
+
                 return { titre, photos_count, superhost, instant_book,
-                         minimum_nights, amenityTexts, nb_avis_dom };
+                         minimum_nights, amenityTexts, nb_avis_dom, subRatings };
             }
         """)
 
@@ -449,6 +481,13 @@ async def _scrape_listing_page(page: Page, listing_url: str) -> dict:
         result["minimum_nights"] = dom.get("minimum_nights")
         result["photos_count"]   = dom.get("photos_count") or None
         result["_nb_avis_dom"]   = dom.get("nb_avis_dom")
+        sr = dom.get("subRatings") or {}
+        result["note_proprete"]      = sr.get("propreté")
+        result["note_precision"]     = sr.get("précision")
+        result["note_arrivee"]       = sr.get("arrivée")
+        result["note_communication"] = sr.get("communication")
+        result["note_emplacement"]   = sr.get("emplacement")
+        result["note_qualite_prix"]  = sr.get("qualité-prix")
 
         # ── Full body text (used for amenities fallback + capacity) ───────────
         body_text: str = await page.evaluate("() => document.body.innerText")
@@ -828,6 +867,12 @@ async def scrape_airbnb(
                 "photos_count": None,
                 "jours_indispo": None,
                 "availability": {},
+                "note_proprete": None,
+                "note_precision": None,
+                "note_arrivee": None,
+                "note_communication": None,
+                "note_emplacement": None,
+                "note_qualite_prix": None,
             }
 
             should_skip = internal_id in all_skip_ids
