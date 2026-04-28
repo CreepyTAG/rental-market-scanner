@@ -146,7 +146,7 @@ st.caption(f"{source_filter} · {date.today().strftime('%d/%m/%Y')} · {len(df)}
 
 # ── Tabs ──────────────────────────────────────────────────────────────────────
 
-tab1, tab2, tab3, tab4 = st.tabs(["Vue marché", "Prix & Revenus", "Occupation", "Données"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["Vue marché", "Prix & Revenus", "Occupation", "Données", "Dataset complet"])
 
 # ════════════════════════════════════════════════════════════════════════════
 # TAB 1 — VUE MARCHÉ
@@ -578,6 +578,70 @@ with tab4:
             "⬇️ Exporter en CSV",
             data=csv,
             file_name=f"listings_{selected_city_name.replace(' ', '_').lower()}_{date.today()}.csv",
+            mime="text/csv",
+        )
+    else:
+        st.info("Aucune annonce pour ces filtres.")
+
+# ════════════════════════════════════════════════════════════════════════════
+# TAB 5 — DATASET COMPLET
+# ════════════════════════════════════════════════════════════════════════════
+
+with tab5:
+    st.subheader("Dataset complet — toutes les colonnes")
+
+    if not df.empty:
+        # Ordered columns: identity first, then all others
+        priority = [
+            "id", "source", "ville", "titre", "type_bien",
+            "code_postal", "code_dept", "neighbourhood", "zone_geo", "lat", "lng",
+            "nb_voyageurs", "nb_chambres", "nb_lits", "nb_sdb",
+            "prix_nuit", "prix_semaine", "prix_weekend", "cleaning_fee", "minimum_nights",
+            "note", "nb_avis",
+            "note_proprete", "note_precision", "note_arrivee",
+            "note_communication", "note_emplacement", "note_qualite_prix",
+            "superhost", "instant_book", "photos_count",
+            "taux_remplissage_90", "taux_remplissage_365",
+            "jours_indispo_90", "jours_indispo_365",
+            "revpar", "revenu_mensuel_estime",
+            "amenities", "url", "created_at", "last_scanned_at",
+        ]
+        all_cols = priority + [c for c in df.columns if c not in priority]
+        show_cols = [c for c in all_cols if c in df.columns]
+
+        st.caption(f"{len(df)} annonces · {len(show_cols)} colonnes · filtres sidebar appliqués")
+
+        fmt = {
+            "prix_nuit":             lambda x: f"{x:.0f} €" if pd.notna(x) else "—",
+            "prix_semaine":          lambda x: f"{x:.0f} €" if pd.notna(x) else "—",
+            "prix_weekend":          lambda x: f"{x:.0f} €" if pd.notna(x) else "—",
+            "cleaning_fee":          lambda x: f"{x:.0f} €" if pd.notna(x) else "—",
+            "revpar":                lambda x: f"{x:.0f} €" if pd.notna(x) else "—",
+            "revenu_mensuel_estime": lambda x: f"{x:.0f} €" if pd.notna(x) else "—",
+            "note":                  lambda x: f"{x:.2f}" if pd.notna(x) else "—",
+            "note_proprete":         lambda x: f"{x:.1f}" if pd.notna(x) else "—",
+            "note_precision":        lambda x: f"{x:.1f}" if pd.notna(x) else "—",
+            "note_arrivee":          lambda x: f"{x:.1f}" if pd.notna(x) else "—",
+            "note_communication":    lambda x: f"{x:.1f}" if pd.notna(x) else "—",
+            "note_emplacement":      lambda x: f"{x:.1f}" if pd.notna(x) else "—",
+            "note_qualite_prix":     lambda x: f"{x:.1f}" if pd.notna(x) else "—",
+            "taux_remplissage_90":   lambda x: f"{x:.1f} %" if pd.notna(x) else "—",
+            "taux_remplissage_365":  lambda x: f"{x:.1f} %" if pd.notna(x) else "—",
+            "lat":                   lambda x: f"{x:.5f}" if pd.notna(x) else "—",
+            "lng":                   lambda x: f"{x:.5f}" if pd.notna(x) else "—",
+        }
+        active_fmt = {k: v for k, v in fmt.items() if k in show_cols}
+
+        st.dataframe(
+            df[show_cols].style.format(active_fmt),
+            width="stretch", hide_index=True, height=600,
+        )
+
+        csv = df[show_cols].to_csv(index=False).encode("utf-8")
+        st.download_button(
+            "⬇️ Exporter tout en CSV",
+            data=csv,
+            file_name=f"dataset_complet_{selected_city_name.replace(' ', '_').lower()}_{date.today()}.csv",
             mime="text/csv",
         )
     else:
