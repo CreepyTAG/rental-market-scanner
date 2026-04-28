@@ -535,6 +535,18 @@ async def _scrape_listing_page(page: Page, listing_url: str) -> dict:
                     m_cp = re.search(r'"postalCode"\s*:\s*"(\d{5})"', next_raw)
                     if m_cp:
                         result["code_postal"] = m_cp.group(1)
+                # neighbourhood from __NEXT_DATA__ if still missing
+                if result["neighbourhood"] is None:
+                    m_loc = re.search(r'"addressLocality"\s*:\s*"([^"]{2,60})"', next_raw)
+                    if m_loc:
+                        result["neighbourhood"] = m_loc.group(1)
+
+        # ── Code postal fallback: body text ───────────────────────────────────
+        if result["code_postal"] is None and body_text:
+            # Match "49100 Angers" or "CP : 49100" style patterns
+            m_cp = re.search(r'\b(\d{5})\b', body_text)
+            if m_cp:
+                result["code_postal"] = m_cp.group(1)
 
         # ── Calendar API: availability + per-day prices ───────────────────────
         for data in api_calendar:

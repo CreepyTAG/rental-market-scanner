@@ -143,13 +143,7 @@ def _migrate_schema(conn: duckdb.DuckDBPyConnection) -> None:
 def _postal_to_dept(code_postal: Optional[str]) -> Optional[str]:
     if not code_postal:
         return None
-    cp = str(code_postal).strip().zfill(5)
-    prefix = cp[:2]
-    if prefix == "20":
-        return "2A" if cp[2] <= "1" else "2B"
-    if prefix in ("97", "98"):
-        return cp[:3]
-    return prefix
+    return str(code_postal).strip()[:2]
 
 
 def _make_listing_id(source: str, id_externe: Optional[str], url: Optional[str]) -> str:
